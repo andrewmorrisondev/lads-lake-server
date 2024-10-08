@@ -4,7 +4,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default async function handler(req, res) {
-  console.log(req.body); // Log the received body
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', 'https://poweredbybackstage.com');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  // Handle preflight (OPTIONS) request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // Return OK for preflight
+  }
 
   // Only allow POST requests
   if (req.method !== 'POST') {
@@ -12,7 +20,7 @@ export default async function handler(req, res) {
   }
 
   let body;
-  
+
   try {
     // If the body is a string, attempt to parse it as JSON
     if (typeof req.body === 'string') {
