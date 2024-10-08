@@ -10,11 +10,6 @@
     "pushover-notifications": "^1.2.3",
     "qs": "^6.13.0"
   },
-  "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build",
-    "deploy": "vercel deploy --prod"
-  },
   "author": "",
   "license": "ISC",
   "description": "Vercel serverless API"
