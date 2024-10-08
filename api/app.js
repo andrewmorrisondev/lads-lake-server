@@ -1,22 +1,14 @@
-import express from 'express';
-import bodyParser from 'body-parser';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import cors from 'cors';  // Import the cors middleware
 
-// Load environment variables from .env file
 dotenv.config();
 
-const app = express();
+export default async function handler(req, res) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
+  }
 
-// Allow CORS for all origins (you can restrict this to specific origins if needed)
-app.use(cors());
-
-// Middleware for parsing application/json
-app.use(bodyParser.json()); // Expect application/json content-type
-
-// POST endpoint to send a message using Pushover
-app.post('/send-text', async (req, res) => {
   const body = req.body; // Expect JSON object in the request body
 
   // Ensure the body exists and is a valid JSON object
@@ -59,10 +51,4 @@ app.post('/send-text', async (req, res) => {
     console.error('Error sending message:', error.response?.data || error.message);
     res.status(500).send('Failed to send message');
   }
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+}
