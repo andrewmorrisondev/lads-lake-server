@@ -4,12 +4,25 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default async function handler(req, res) {
+  console.log(req.body); // Log the received body
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const body = req.body; // Expect JSON object in the request body
+  let body;
+  
+  try {
+    // If the body is a string, attempt to parse it as JSON
+    if (typeof req.body === 'string') {
+      body = JSON.parse(req.body);
+    } else {
+      body = req.body;
+    }
+  } catch (error) {
+    return res.status(400).send('Invalid JSON body.');
+  }
 
   // Ensure the body exists and is a valid JSON object
   if (!body || typeof body !== 'object') {
@@ -38,11 +51,15 @@ export default async function handler(req, res) {
 
   try {
     // Send a POST request to Pushover API
-    const response = await axios.post('https://api.pushover.net/1/messages.json', new URLSearchParams(messageParams), {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    });
+    const response = await axios.post(
+      'https://api.pushover.net/1/messages.json', 
+      new URLSearchParams(messageParams), 
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      }
+    );
 
     // Log and send a response based on Pushover API's response
     console.log(`Pushover API response:`, response.data);
