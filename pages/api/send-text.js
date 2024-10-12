@@ -6,6 +6,7 @@ dotenv.config();
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', 'https://poweredbybackstage.com');
+  res.setHeader('Access-Control-Allow-Origin', 'https://live.poweredbybackstage.com/frisbees');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
